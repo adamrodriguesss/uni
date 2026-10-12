@@ -1,0 +1,80 @@
+services:
+  search-db:
+    image: postgres:15-alpine
+    container_name: micro-search-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=search_db
+    volumes:
+      - search-data:/var/lib/postgresql/data
+      - ./services/search/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./services/search/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  home-db:
+    image: postgres:15-alpine
+    container_name: micro-home-db
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=home_db
+    volumes:
+      - home-data:/var/lib/postgresql/data
+      - ./services/home/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./services/home/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  cart-db:
+    image: postgres:15-alpine
+    container_name: micro-cart-db
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cart_db
+    volumes:
+      - cart-data:/var/lib/postgresql/data
+      - ./services/cart/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  checkout-db:
+    image: postgres:15-alpine
+    container_name: micro-checkout-db
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=checkout_db
+    volumes:
+      - checkout-data:/var/lib/postgresql/data
+      - ./services/checkout/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  search-data:
+  home-data:
+  cart-data:
+  checkout-data:

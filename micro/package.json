@@ -1,0 +1,13 @@
+{
+  "name": "micro-backend",
+  "version": "1.0.0",
+  "scripts": {
+    "postinstall": "npm --prefix gateway install && npm --prefix services/search install && npm --prefix services/home install && npm --prefix services/cart install && npm --prefix services/checkout install",
+    "build": "npm --prefix gateway run build && npm --prefix services/search run build && npm --prefix services/home run build && npm --prefix services/cart run build && npm --prefix services/checkout run build",
+    "start": "concurrently -k -n \"gateway,search,home,cart,checkout\" -c \"blue,green,yellow,magenta,cyan\" \"npm --prefix gateway start\" \"npm --prefix services/search start\" \"npm --prefix services/home start\" \"npm --prefix services/cart start\" \"npm --prefix services/checkout start\"",
+    "dev": "concurrently -k -n \"gateway,search,home,cart,checkout\" -c \"blue,green,yellow,magenta,cyan\" \"npm --prefix gateway run dev\" \"npm --prefix services/search run dev\" \"npm --prefix services/home run dev\" \"npm --prefix services/cart run dev\" \"npm --prefix services/checkout run dev\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
